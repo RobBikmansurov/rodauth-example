@@ -72,6 +72,64 @@ app/views/application/_navbar.html.erb
 app/lib/rodauth_app.rb
 
 
+## Recovery codes
+```
+rails generate rodauth:migration recovery_codes
+rails db:migrate
+```
+
+app/lib/rodauth_app.rb
+
+`enable :otp, :recovery_codes` adds the following routes to our app:
+```
+/recovery-auth – authenticate via a recovery code
+/recovery-codes – view & add recovery codes
+```
+
+app/views/rodauth/add_recovery_codes.html.erb
+vi config/routes.rb
+app/controllers/rodauth_controller.rb
+
+
+## SMS codes
+```
+rails generate rodauth:migration sms_codes
+rails db:migrate
+```
+
+`enable :otp, :recovery_codes, :sms_codes` adds the following routes to our app:
+
+```
+/sms-request – request the SMS code to be sent
+/sms-auth – authenticate via an SMS code
+/sms-setup – set up SMS codes authentication
+/sms-confirm – confirm the provided phone number
+/sms-disable – disable SMS codes authentication
+```
+
+app/lib/rodauth_app.rb
+
+We’ll use Twilio for sending SMS messages. Assuming we’ve set up an account, we’ll add the account SID, auth token, and phone number to Rails credentials:
+
+$ rails credentials:edit
+
+Next, we’ll install the twilio-ruby and dry-initializer gems, and create a wrapper class for the Twilio client:
+
+$ bundle add twilio-ruby dry-initializer
+
+app/lib/twilio_client.rb
+
+## Disabling multifactor authentication
+
+```
+/otp-disable – disable OTP authentication
+/sms-disable – disable multifactor authentication
+/multifactor-disable – disable all multifactor methods
+```
+
+
+
+
 
 
 

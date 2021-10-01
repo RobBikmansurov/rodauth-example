@@ -145,7 +145,7 @@ class RodauthApp < Rodauth::Rails::App
       Profile.find_by!(account_id: account_id).destroy
     end
 
-    enable :otp, :recovery_codes
+    enable :otp, :recovery_codes, :sms_codes
 
     # redirect the user to the MFA page if they have MFA setup
     login_redirect do
@@ -163,6 +163,15 @@ class RodauthApp < Rodauth::Rails::App
       set_notice_now_flash "#{otp_setup_notice_flash}, please make note of your recovery codes"
       response.write add_recovery_codes_view
       request.halt # don't process the request any further
+    end
+
+    sms_send do |phone, message|
+      twilio = TwilioClient.new
+      twilio.send_sms(phone, message)
+    rescue TwilioClient::InvalidPhoneNumber
+      throw_error_status(422, sms_phone_param, sms_invalid_phone_message)
+    rescue TwilioClient::Error
+      throw_error_status(500, sms_phone_param, "sending the SMS code failed")
     end
   end
 
