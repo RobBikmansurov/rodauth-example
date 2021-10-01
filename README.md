@@ -25,7 +25,8 @@ app/lib/rodauth_app.rb
 ```
 $ rails generate migration add_account_id_to_posts account:references
 $ rails db:migrate
-``
+```
+
 app/models/account.rb
 
 app/controllers/posts_controller.rb
