@@ -145,7 +145,8 @@ class RodauthApp < Rodauth::Rails::App
       Profile.find_by!(account_id: account_id).destroy
     end
 
-    enable :otp
+    enable :otp, :recovery_codes
+
     # redirect the user to the MFA page if they have MFA setup
     login_redirect do
       if uses_two_factor_authentication?
@@ -153,6 +154,15 @@ class RodauthApp < Rodauth::Rails::App
       else
         "/"
       end
+    end
+
+    # auto generate recovery codes after TOTP setup
+    auto_add_recovery_codes? true
+    # display recovery codes after TOTP setup
+    after_otp_setup do
+      set_notice_now_flash "#{otp_setup_notice_flash}, please make note of your recovery codes"
+      response.write add_recovery_codes_view
+      request.halt # don't process the request any further
     end
   end
 
