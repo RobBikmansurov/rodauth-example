@@ -1,5 +1,7 @@
 TODO: https://janko.io/adding-multifactor-authentication-in-rails-with-rodauth/
 
+# Adding Authentication in Rails 6 with Rodauth
+
 https://janko.io/adding-authentication-in-rails-with-rodauth/
 ```
 $ git clone https://gitlab.com/janko-m/rails_bootstrap_starter.git rodauth_blog
@@ -45,6 +47,31 @@ rails db:migrate
 app/models/account.rb
 
 app/lib/rodauth_app.rb
+
+
+## TOTP
+```
+bundle add rotp rqrcode
+rails generate rodauth:migration otp
+rails db:migrate
+```
+app/lib/rodauth_app.rb
+
+`enable :otp` adds the following routes to our application:
+```
+/otp-auth – authenticate via TOTP code
+/otp-setup – set up TOTP authentication
+/otp-disable – disable TOTP authentication
+/multifactor-manage – set up or disable available MFA methods
+/multifactor-auth – authenticate via available MFA methods
+/multifactor-disable – disable all MFA methods
+```
+
+app/views/application/_navbar.html.erb
+
+app/lib/rodauth_app.rb
+
+
 
 
 

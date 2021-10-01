@@ -14,3 +14,6 @@ group :test do
 end
 
 gem "rodauth-rails", "~> 0.16.0"
+
+gem "rotp", "~> 6.2"
+gem "rqrcode", "~> 2.1"

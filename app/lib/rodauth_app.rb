@@ -131,6 +131,7 @@ class RodauthApp < Rodauth::Rails::App
     # verify_login_change_deadline_interval Hash[days: 2]
     # remember_deadline_interval Hash[days: 30]
 
+    # create profile for account
     before_create_account do
       # Validate presence of the name field
       throw_error_status(422, "name", "must be present") unless param_or_nil("name")
@@ -142,6 +143,16 @@ class RodauthApp < Rodauth::Rails::App
     after_close_account do
       # Delete the associated profile record
       Profile.find_by!(account_id: account_id).destroy
+    end
+
+    enable :otp
+    # redirect the user to the MFA page if they have MFA setup
+    login_redirect do
+      if uses_two_factor_authentication?
+        two_factor_auth_required_redirect
+      else
+        "/"
+      end
     end
   end
 
@@ -183,6 +194,12 @@ class RodauthApp < Rodauth::Rails::App
     #
     #   break # allow the Rails app to handle other "/admin/*" requests
     # end
+
+    # require MFA if the user is logged in and has MFA setup
+    if rodauth.logged_in? && rodauth.uses_two_factor_authentication?
+      rodauth.require_two_factor_authenticated
+    end
+
     if r.path.start_with?("/posts")
       rodauth.require_authentication
     end

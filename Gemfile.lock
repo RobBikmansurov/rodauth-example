@@ -75,6 +75,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
+    chunky_png (1.4.0)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
     erubi (1.10.0)
@@ -151,6 +152,11 @@ GEM
       rodauth (~> 2.15)
       sequel-activerecord_connection (~> 1.1)
       tilt
+    rotp (6.2.0)
+    rqrcode (2.1.0)
+      chunky_png (~> 1.0)
+      rqrcode_core (~> 1.0)
+    rqrcode_core (1.2.0)
     semantic_range (2.3.0)
     sequel (5.48.0)
     sequel-activerecord_connection (1.2.4)
@@ -190,6 +196,8 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 6.1)
   rodauth-rails (~> 0.16.0)
+  rotp (~> 6.2)
+  rqrcode (~> 2.1)
   sqlite3 (~> 1.4)
   webpacker (~> 5.0)
 
